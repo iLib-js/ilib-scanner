@@ -1,9 +1,10 @@
 {
     "name": "ilib-scanner",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "main": "./ilib-scanner.js",
     "bin": {
-        "ilib-scanner": "./ilib-scanner.js"
+        "ilib-scanner": "./ilib-scanner.js",
+        "ilib-scanner.bat": "./ilib-scanner.bat"
     },
     "description": "A utility which scans your source code and creates a webpack meta file that includes only those ilib classes that your code is actually using.",
     "license": "Apache-2.0",
@@ -36,7 +37,8 @@
     "files": [
         "README.md",
         "LICENSE",
-        "ilib-scanner.js"
+        "ilib-scanner.js",
+        "ilib-scanner.bat"
     ],
     "repository": {
         "type": "git",
