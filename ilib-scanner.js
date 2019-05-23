@@ -60,6 +60,11 @@ var optionConfig = {
         short: "i",
         varName: "ilibRoot",
         help: "Explicitly specify the location of the root of ilib. If not specified, this scanner will rely on node to find the ilib instance in the node_modules directory."
+    },
+    mode: {
+        short: "m",
+        help: "Set the mode to 'production' or 'development' for webpack 4. Default: no mode (mode is not valid in webpack versions<4).",
+        varName: "mode"
     }
 };
 
@@ -84,6 +89,7 @@ var outputDir = path.dirname(outputPath) || ".";
 var webpackConfigPath = path.join(outputDir, "webpack.config.js");
 var locales = typeof(options.opt.locales) === "string" ? options.opt.locales.split(",") : options.opt.locales;
 var ilibRoot = options.opt.ilibRoot;
+var mode = options.opt.mode;
 
 var classSet = new Set();
 
@@ -167,6 +173,7 @@ var webpackConfigContents =
     "};\n" +
     "module.exports = {\n" +
     "    entry: path.resolve('./" + outputFile + "'),\n" +
+    (mode ? "    mode: '" + mode + "',\n" : "") +
     "    output: {\n" +
     "        filename: 'ilib.js',\n" +
     "        chunkFilename: 'ilib.[name].js',\n" +
