@@ -123,3 +123,9 @@ files as well) to your web server or check it in to your
 repo so that it all gets published with the next push. We also recommend that
 you check these files in to your source code control system.
 
+Release Notes
+-------------
+
+### 1.3.0
+
+Add support for webpack 4 by adding the "mode" setting. Default is 'development'.
