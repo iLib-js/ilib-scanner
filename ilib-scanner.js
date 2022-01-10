@@ -6,7 +6,7 @@
  * for your site.
  *
  * @license
- * Copyright © 2018, JEDLSoft
+ * Copyright © 2018, 2022 JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,22 @@ var path = require("path");
 
 var OptionsParser = require("options-parser");
 var classes;
+
+// In order to include automatically non-gregorian CalendarDate when using DateFactory or JS Date
+var dateSet = [
+    "DateFactory",
+    "GregorianDate",
+    "CopticDate",
+    "EthiopicDate",
+    "GregorianDate",
+    "HanDate",
+    "HebrewDate",
+    "IslamicDate",
+    "JulianDate",
+    "PersianDate",
+    "PersianAlgoDate",
+    "ThaiSolarDate"
+];
 
 var optionConfig = {
     help: {
@@ -120,6 +136,11 @@ function scanFileOrDir(pathName) {
                 classes.forEach(function(cls) {
                     if (data.indexOf(cls) > -1) {
                         classSet.add(cls);
+                    }
+                    if ((data.indexOf("new Date") > -1) || (dateSet.indexOf("DateFactory") > -1)){
+                        dateSet.forEach(function(calDate){
+                            classSet.add(calDate);
+                        })
                     }
                 });
             }
