@@ -49,5 +49,8 @@
     },
     "dependencies": {
         "options-parser": "^0.4.0"
+    },
+    "devDependencies": {
+        "ilib": "^14.12.0"
     }
 }

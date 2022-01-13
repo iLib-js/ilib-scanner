@@ -32,17 +32,20 @@ var classes;
 var dateSet = [
     "DateFactory",
     "GregorianDate",
-    "CopticDate",
-    "EthiopicDate",
-    "GregorianDate",
-    "HanDate",
-    "HebrewDate",
-    "IslamicDate",
-    "JulianDate",
-    "PersianDate",
-    "PersianAlgoDate",
-    "ThaiSolarDate"
+    "JulianDate"
 ];
+
+var localeCalMap = {
+    "am" : "EthiopicDate",
+    "ar" : "IslamicDate",
+    "cop" : "CopticDate",
+    "fa" : ["PersianDate", "PersianAlgoDate"],
+    "he": "HebrewDate",
+    "th" : "ThaiSolarDate",
+    "zh": "HanDate"
+}
+
+var addCalDateList=[];
 
 var optionConfig = {
     help: {
@@ -117,6 +120,21 @@ function loadIlibClasses() {
     }
 }
 
+function maplocaleCalDate(locales){
+    locales.forEach(function(lo){
+        var lang = lo.split("-")[0];
+        for (var item in localeCalMap){
+            if (item === lang) {
+                if (typeof (localeCalMap[lang]) == "string"){
+                    addCalDateList.push(localeCalMap[item]);
+                } else {
+                    addCalDateList = addCalDateList.concat(localeCalMap[lang]);
+                }
+            }
+        }
+    });
+}
+
 function scanFileOrDir(pathName) {
     try {
         stat = fs.statSync(pathName);
@@ -140,7 +158,12 @@ function scanFileOrDir(pathName) {
                     if ((data.indexOf("new Date") > -1) || (dateSet.indexOf("DateFactory") > -1)){
                         dateSet.forEach(function(calDate){
                             classSet.add(calDate);
-                        })
+                        });
+                        if (addCalDateList.length > 0){
+                            addCalDateList.forEach(function(list){
+                                classSet.add(list);
+                            });
+                        }
                     }
                 });
             }
@@ -152,6 +175,7 @@ function scanFileOrDir(pathName) {
     }
 }
 
+maplocaleCalDate(locales);
 files.forEach(function(file) {
     scanFileOrDir(file);
 });
