@@ -39,14 +39,38 @@ var localeCalMap = {
     "ET" : "EthiopicDate",
     "TR" : "IslamicDate",
     "SA" : "IslamicDate",
-    "EG" : "CopticDate",
-    "IR" : ["PersianDate", "PersianAlgoDate"],
-    "IL": "HebrewDate",
+    "MA" : "IslamicDate",
+    "DZ" : "IslamicDate",
+    "TN" : "IslamicDate",
+    "LY" : "IslamicDate",
+    "SD" : "IslamicDate",
+    "JO" : "IslamicDate",
+    "LB" : "IslamicDate",
+    "SY" : "IslamicDate",
+    "IQ" : "IslamicDate",
+    "YE" : "IslamicDate",
+    "AE" : "IslamicDate",
+    "OM" : "IslamicDate",
+    "QA" : "IslamicDate",
+    "BH" : "IslamicDate",
+    "KW" : "IslamicDate",
+    "PK" : "IslamicDate",
+    "TM" : "IslamicDate",
+    "KG" : "IslamicDate",
+    "BD" : "IslamicDate",
+    "EG" : ["IslamicDate", "CopticDate"],
+    "IR" : ["IslamicDate", "PersianDate", "PersianAlgoDate"],
+    "AF" : ["IslamicDate", "PersianDate", "PersianAlgoDate"],
+    "IL" : "HebrewDate",
     "TH" : "ThaiSolarDate",
-    "CN": "HanDate"
-}
+    "CN" : "HanDate",
+    "TW" : "HanDate",
+    "HK" : "HanDate",
+    "MO" : "HanDate",
+    "SG" : "HanDate"
+ }
 
-var addCalDateList=[];
+var addCalDateList = [];
 
 var optionConfig = {
     help: {
