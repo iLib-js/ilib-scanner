@@ -24,6 +24,7 @@
 
 var fs = require("fs");
 var path = require("path");
+var ilib = require("ilib");
 var Locale = require("ilib/lib/Locale");
 var OptionsParser = require("options-parser");
 var classes;
@@ -58,9 +59,9 @@ var localeCalMap = {
     "TM" : "IslamicDate",
     "KG" : "IslamicDate",
     "BD" : "IslamicDate",
-    "EG" : ["CopticDate", "IslamicDate"],
-    "IR" : ["PersianDate", "PersianAlgoDate", "IslamicDate"],
-    "AF" : ["PersianDate", "PersianAlgoDate", "IslamicDate"],
+    "EG" : ["IslamicDate", "CopticDate"],
+    "IR" : ["IslamicDate", "PersianDate", "PersianAlgoDate"],
+    "AF" : ["IslamicDate", "PersianDate", "PersianAlgoDate"],
     "IL" : "HebrewDate",
     "TH" : "ThaiSolarDate",
     "CN" : "HanDate",
@@ -69,8 +70,6 @@ var localeCalMap = {
     "MO" : "HanDate",
     "SG" : "HanDate"
  }
-
-var addCalDateList = [];
 
 var optionConfig = {
     help: {
@@ -145,24 +144,22 @@ function loadIlibClasses() {
     }
 }
 
+var dateTypes = new Set();
+var addCalDateList = [];
+
 function maplocaleCalDate(locales){
     locales.forEach(function(lo){
         var locale = new Locale(lo);
         var region = locale.getRegion();
-        for (var item in localeCalMap){
-            if (item === region) {
-                var isValueString = (typeof localeCalMap[item] === "string")? true : false;
-                var caldate = (isValueString) ? localeCalMap[item] : localeCalMap[item][0];
-                if (!addCalDateList.includes(caldate)){
-                    if(isValueString){
-                        addCalDateList.push(localeCalMap[item]);
-                    } else {
-                        addCalDateList = addCalDateList.concat(localeCalMap[item]);
-                    }
-                }
-            }
+        var dates = localeCalMap[region];
+        if (dates) {
+            dates = ilib.isArray(dates) ? dates : [dates];
+            dates.forEach(function(type) {
+                dateTypes.add(type);
+            });
         }
     });
+    addCalDateList = Array.from(dateTypes);
 }
 
 function scanFileOrDir(pathName) {
