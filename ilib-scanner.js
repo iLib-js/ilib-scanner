@@ -24,7 +24,7 @@
 
 var fs = require("fs");
 var path = require("path");
-
+var Locale = require("ilib/lib/Locale");
 var OptionsParser = require("options-parser");
 var classes;
 
@@ -36,13 +36,14 @@ var dateSet = [
 ];
 
 var localeCalMap = {
-    "am" : "EthiopicDate",
-    "ar" : "IslamicDate",
-    "cop" : "CopticDate",
-    "fa" : ["PersianDate", "PersianAlgoDate"],
-    "he": "HebrewDate",
-    "th" : "ThaiSolarDate",
-    "zh": "HanDate"
+    "ET" : "EthiopicDate",
+    "TR" : "IslamicDate",
+    "SA" : "IslamicDate",
+    "EG" : "CopticDate",
+    "IR" : ["PersianDate", "PersianAlgoDate"],
+    "IL": "HebrewDate",
+    "TH" : "ThaiSolarDate",
+    "CN": "HanDate"
 }
 
 var addCalDateList=[];
@@ -122,13 +123,18 @@ function loadIlibClasses() {
 
 function maplocaleCalDate(locales){
     locales.forEach(function(lo){
-        var lang = lo.split("-")[0];
+        var locale = new Locale(lo);
+        var region = locale.getRegion();
         for (var item in localeCalMap){
-            if (item === lang) {
-                if (typeof (localeCalMap[lang]) == "string"){
-                    addCalDateList.push(localeCalMap[item]);
-                } else {
-                    addCalDateList = addCalDateList.concat(localeCalMap[lang]);
+            if (item === region) {
+                var isValueString = (typeof localeCalMap[item] === "string")? true : false;
+                var caldate = (isValueString) ? localeCalMap[item] : localeCalMap[item][0];
+                if (!addCalDateList.includes(caldate)){
+                    if(isValueString){
+                        addCalDateList.push(localeCalMap[item]);
+                    } else {
+                        addCalDateList = addCalDateList.concat(localeCalMap[item]);
+                    }
                 }
             }
         }
