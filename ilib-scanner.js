@@ -6,7 +6,7 @@
  * for your site.
  *
  * @license
- * Copyright © 2018, JEDLSoft
+ * Copyright © 2018, 2022 JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,52 @@
 
 var fs = require("fs");
 var path = require("path");
-
+var ilib = require("ilib");
+var Locale = require("ilib/lib/Locale");
 var OptionsParser = require("options-parser");
 var classes;
+
+// In order to include automatically non-gregorian CalendarDate when using DateFactory or JS Date
+var dateSet = [
+    "DateFactory",
+    "GregorianDate",
+    "JulianDate"
+];
+
+var localeCalMap = {
+    "ET" : "EthiopicDate",
+    "TR" : "IslamicDate",
+    "SA" : "IslamicDate",
+    "MA" : "IslamicDate",
+    "DZ" : "IslamicDate",
+    "TN" : "IslamicDate",
+    "LY" : "IslamicDate",
+    "SD" : "IslamicDate",
+    "JO" : "IslamicDate",
+    "LB" : "IslamicDate",
+    "SY" : "IslamicDate",
+    "IQ" : "IslamicDate",
+    "YE" : "IslamicDate",
+    "AE" : "IslamicDate",
+    "OM" : "IslamicDate",
+    "QA" : "IslamicDate",
+    "BH" : "IslamicDate",
+    "KW" : "IslamicDate",
+    "PK" : "IslamicDate",
+    "TM" : "IslamicDate",
+    "KG" : "IslamicDate",
+    "BD" : "IslamicDate",
+    "EG" : ["IslamicDate", "CopticDate"],
+    "IR" : ["IslamicDate", "PersianDate", "PersianAlgoDate"],
+    "AF" : ["IslamicDate", "PersianDate", "PersianAlgoDate"],
+    "IL" : "HebrewDate",
+    "TH" : "ThaiSolarDate",
+    "CN" : "HanDate",
+    "TW" : "HanDate",
+    "HK" : "HanDate",
+    "MO" : "HanDate",
+    "SG" : "HanDate"
+ }
 
 var optionConfig = {
     help: {
@@ -101,6 +144,24 @@ function loadIlibClasses() {
     }
 }
 
+var dateTypes = new Set();
+var addCalDateList = [];
+
+function maplocaleCalDate(locales){
+    locales.forEach(function(lo){
+        var locale = new Locale(lo);
+        var region = locale.getRegion();
+        var dates = localeCalMap[region];
+        if (dates) {
+            dates = ilib.isArray(dates) ? dates : [dates];
+            dates.forEach(function(type) {
+                dateTypes.add(type);
+            });
+        }
+    });
+    addCalDateList = Array.from(dateTypes);
+}
+
 function scanFileOrDir(pathName) {
     try {
         stat = fs.statSync(pathName);
@@ -121,6 +182,16 @@ function scanFileOrDir(pathName) {
                     if (data.indexOf(cls) > -1) {
                         classSet.add(cls);
                     }
+                    if ((data.indexOf("new Date") > -1) || (dateSet.indexOf("DateFactory") > -1)){
+                        dateSet.forEach(function(calDate){
+                            classSet.add(calDate);
+                        });
+                        if (addCalDateList.length > 0){
+                            addCalDateList.forEach(function(list){
+                                classSet.add(list);
+                            });
+                        }
+                    }
                 });
             }
         } else {
@@ -131,6 +202,7 @@ function scanFileOrDir(pathName) {
     }
 }
 
+maplocaleCalDate(locales);
 files.forEach(function(file) {
     scanFileOrDir(file);
 });
