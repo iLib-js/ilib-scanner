@@ -126,6 +126,9 @@ you check these files in to your source code control system.
 Release Notes
 -------------
 
+### 1.3.2
+Move ilib from devDependencies to dependencies.
+
 ### 1.3.1
 Fix to include automatically non-gregorian CalendarDate when using DateFactory or JS Date Object.
 
