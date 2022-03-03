@@ -117,7 +117,7 @@ var optionConfig = {
     },
     classPath: {
         short: "p",
-        help: "explicitly specify the `ilib-unpack.js` path which unpacks a set of ilib routines webpacked into the global scope.",
+        help: "Explicitly specify the `ilib-unpack.js` path which unpacks a set of ilib routines webpacked into the global scope.",
     }
 };
 
