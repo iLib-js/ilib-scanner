@@ -126,6 +126,9 @@ you check these files in to your source code control system.
 Release Notes
 -------------
 
+### 1.4.0
+Fix ilib circular Dependency issue. new `classPath` option is added to explicitly specify the `ilib-unpack.js` file path.
+
 ### 1.3.2
 Move ilib from devDependencies to dependencies.
 
