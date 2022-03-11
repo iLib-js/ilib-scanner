@@ -24,8 +24,7 @@
 
 var fs = require("fs");
 var path = require("path");
-var ilib = require("ilib");
-var Locale = require("ilib/lib/Locale");
+var Locale = require("ilib-locale");
 var OptionsParser = require("options-parser");
 var classes;
 
@@ -115,6 +114,10 @@ var optionConfig = {
         short: "m",
         help: "Set the mode to 'production' or 'development' for webpack 4. Default: no mode (mode is not valid in webpack versions<4).",
         varName: "mode"
+    },
+    classPath: {
+        short: "p",
+        help: "Explicitly specify the `ilib-unpack.js` path which unpacks a set of ilib routines webpacked into the global scope.",
     }
 };
 
@@ -140,12 +143,18 @@ var webpackConfigPath = path.join(outputDir, "webpack.config.js");
 var locales = typeof(options.opt.locales) === "string" ? options.opt.locales.split(",") : options.opt.locales;
 var ilibRoot = options.opt.ilibRoot;
 var mode = options.opt.mode;
+var classPath = options.opt.classPath;
 
 var classSet = new Set();
 
 function loadIlibClasses() {
+    
     if (ilibRoot) {
-        classes = require(path.join(ilibRoot, "lib/ilib-unpack.js"));
+        if(classPath){
+            classes = require(path.join(ilibRoot, classPath));
+        } else {
+            classes = require(path.join(ilibRoot, "lib/ilib-unpack.js"));
+        }
     } else {
         classes = require("ilib/lib/ilib-unpack.js");
     }
@@ -160,7 +169,7 @@ function maplocaleCalDate(locales){
         var region = locale.getRegion();
         var dates = localeCalMap[region];
         if (dates) {
-            dates = ilib.isArray(dates) ? dates : [dates];
+            dates = Array.isArray(dates) ? dates : [dates];
             dates.forEach(function(type) {
                 dateTypes.add(type);
             });
